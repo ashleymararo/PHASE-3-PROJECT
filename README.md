@@ -7,8 +7,9 @@
 ## **Features**
 
 - User login and sign up
-- View all users in the system
 - View available fitness challenges
+- Add new challenges
+- Delete challenges
 - Add logs for challenges with notes
 - View all logs with user and challenge details
 - Persistent data storage using **SQLite** with **SQLAlchemy ORM**
@@ -61,13 +62,14 @@ python -m lib.cli
 1. Login / Sign Up – Enter your name.
 2. Main Menu – Choose options by typing the number:
 
-- 1 – View Users
-- 2 – View Challenges
+- 1 – Add Challenges
+- 2 – Delete Challenge
 - 3 – Add Log
 - 4 – View Logs
 - 0 – Exit
 
 All interactions are done in the terminal.
+Users can only manage challenges if they’re logged in.
 
 ---
 

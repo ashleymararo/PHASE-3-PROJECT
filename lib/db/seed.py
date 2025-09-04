@@ -18,3 +18,4 @@ for title, desc in challenges:
 
 session.commit()
 print("✅ Database seeded successfully!")
+
