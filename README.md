@@ -5,14 +5,14 @@
 ---
 
 ## **Features**
+FitLog helps users stay consistent in their fitness journey through these key features:
 
-- User login and sign up
-- View available fitness challenges
-- Add new challenges
-- Delete challenges
-- Add logs for challenges with notes
-- View all logs with user and challenge details
-- Persistent data storage using **SQLite** with **SQLAlchemy ORM**
+- **User Login / Signup**: Users can create a new profile or log in with their name. Profiles are stored in the database for persistence.
+- **Challenges**: Users can view existing challenges and add their own custom challenges.
+- **Logs**: Users can record progress by adding notes to a specific challenge (e.g., “Day 5 – Completed 20 pushups”). Logs are tied to both the user and the challenge.
+- **Progress Tracking**: Users can view their own logs, showing which challenge they attempted and any notes they added. This keeps each user’s data private while still allowing them to track their fitness journey over time.
+- **Data Persistence**: All users, challenges, and logs are stored in a **SQLite** database using **SQLAlchemy ORM**, so data isn’t lost between sessions.
+- **Interactive CLI Menu**: A simple text-based menu guides the user through all available actions (e.g., view challenges, add logs, exit the program).
 
 ---
 
