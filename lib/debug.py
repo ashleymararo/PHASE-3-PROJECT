@@ -1,4 +1,4 @@
-from db.models import session, User, Challenge, Log
+from lib.db.models import session, User, Challenge, Log
 
 if __name__ == "__main__":
     users = session.query(User).all()

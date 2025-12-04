@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
 from sqlalchemy.orm import declarative_base, relationship, sessionmaker
 
-engine = create_engine("sqlite:///lib/fitlog.db", echo=False)  # DB inside lib/
+engine = create_engine("sqlite:///fitlog.db", echo=False)
 Session = sessionmaker(bind=engine)
 session = Session()
 
@@ -29,4 +29,3 @@ class Log(Base):
     user = relationship("User", back_populates="logs")
     challenge = relationship("Challenge", back_populates="logs")
 
-Base.metadata.create_all(engine)

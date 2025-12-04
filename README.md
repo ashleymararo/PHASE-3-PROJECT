@@ -7,29 +7,36 @@
 ## **Features**
 FitLog helps users stay consistent in their fitness journey through these key features:
 
-- **User Login / Signup**: Users can create a new profile or log in with their name. Profiles are stored in the database for persistence.
-- **Challenges**: Users can view existing challenges and add their own custom challenges.
-- **Logs**: Users can record progress by adding notes to a specific challenge (e.g., “Day 5 – Completed 20 pushups”). Logs are tied to both the user and the challenge.
-- **Progress Tracking**: Users can view their own logs, showing which challenge they attempted and any notes they added. This keeps each user’s data private while still allowing them to track their fitness journey over time.
-- **Data Persistence**: All users, challenges, and logs are stored in a **SQLite** database using **SQLAlchemy ORM**, so data isn’t lost between sessions.
-- **Interactive CLI Menu**: A simple text-based menu guides the user through all available actions (e.g., view challenges, add logs, exit the program).
+- User login & auto sign-up
+- View available fitness challenges
+- Create new challenges
+- Delete challenges (only if no logs exist)
+- Log daily challenge activity
+- View personal logs
+- Edit existing logs
+- Delete logs
+- Persistent SQLite database
+- Database migrations with Alembic
+- Seeded starter data
 
 ---
 
 ## **Project Structure**
 
 ```
-.
+├── cli.py
+├── fitlog.db
+├── alembic.ini
+├── migrations/
+├── lib/
+│ ├── db/
+│ │ ├── models.py
+│ │ └── seed.py
+│ ├── helpers.py
+│ └── init.py
 ├── Pipfile
 ├── Pipfile.lock
-├── README.md
-└── lib
-    ├── cli.py
-    ├── db
-    │   ├── models.py
-    │   └── seed.py
-    ├── debug.py
-    └── helpers.py
+└── README.md
 ```
 
 ---
@@ -47,29 +54,52 @@ cd Phase3-FitLog
 pipenv install
 pipenv shell
 ```
-3. Seed the database:
+3. Run database migrations
 ```
-python -m lib.db.seed
+alembic upgrade head
+```
+4. Seed the database
+```
+python lib/db/seed.py
+```
+5. Run the application
+```
+python cli.py
 ```
 
 ---
 
 ## **Usage**
-Run the CLI application:
-```
-python -m lib.cli
-```
-1. Login / Sign Up – Enter your name.
-2. Main Menu – Choose options by typing the number:
-
-- 1 – Add Challenges
-- 2 – Delete Challenge
-- 3 – Add Log
-- 4 – View Logs
-- 0 – Exit
+1. Launch the app
+2. Enter your name to log in or create user
+3. View available challenges
+4. Add logs to track your progress
+5. Edit or delete logs anytime
+6. Create or delete custom fitness challenges
+7. Exit when done
 
 All interactions are done in the terminal.
 Users can only manage challenges if they’re logged in.
+
+---
+
+## **Database Models**
+**User**
+- id
+- name
+- has many logs
+
+**Challenge**
+- id
+- title
+- description
+- has many logs
+
+**Log**
+- id
+- user_id
+- challenge_id
+- notes
 
 ---
 
@@ -78,6 +108,7 @@ Users can only manage challenges if they’re logged in.
 - SQLite for database
 - SQLAlchemy ORM for object-relational mapping
 - Pipenv for virtual environment and dependency management
+- Alembic for database migrations
 
 ---
 

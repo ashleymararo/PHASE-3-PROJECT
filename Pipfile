@@ -5,8 +5,8 @@ name = "pypi"
 
 [packages]
 ipdb = "*"
-alembic = "*"
 sqlalchemy = "*"
+alembic = "*"
 
 [dev-packages]
 

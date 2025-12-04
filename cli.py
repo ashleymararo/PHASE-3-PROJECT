@@ -1,5 +1,5 @@
-from lib.helpers import print_header
 from lib.db.models import session, User, Challenge, Log
+from lib.helpers import print_header
 
 from sqlalchemy import func
 
@@ -8,9 +8,15 @@ current_user = None
 def login():
     global current_user
     print_header("Login / Sign Up")
+
     name = input("Enter your name: ").strip()
 
+    if not name:
+        print("⚠️ Name cannot be empty. Please enter a valid name.")
+        return login()
+
     user = session.query(User).filter(func.lower(User.name) == name.lower()).first()
+
     if user:
         print(f"✅ Welcome back, {user.name}!")
     else:
@@ -21,9 +27,14 @@ def login():
 
     current_user = user
 
+
 def view_users():
     print_header("Users")
-    print(f"👤 Current User: {current_user.name}")
+    users = session.query(User).all()
+    for u in users:
+        print(f"{u.id}. {u.name}")
+
+    print(f"\n👤 Current User: {current_user.name}")
 
 def view_challenges():
     print_header("Challenges")
@@ -109,15 +120,71 @@ def add_log_cli():
     print(f"✅ Log added for {current_user.name} on '{challenge.title}'")
 
 def view_logs():
-    print_header("Logs")
+    print_header("My Logs")
     logs = session.query(Log).filter_by(user_id=current_user.id).all()
+
     if not logs:
         print("No logs yet.")
         return
 
     for log in logs:
-        challenge = session.query(Challenge).filter_by(id=log.challenge_id).first()
-        print(f"{challenge.title}: {log.notes}")
+        print(f"{log.id}. {log.challenge.title} → {log.notes}")
+
+def edit_log():
+    print_header("Edit Log")
+
+    logs = session.query(Log).filter_by(user_id=current_user.id).all()
+    if not logs:
+        print("No logs to edit.")
+        return
+
+    for log in logs:
+        print(f"{log.id}. {log.challenge.title} → {log.notes}")
+
+    choice = input("Enter Log ID to edit: ").strip()
+    if not choice.isdigit():
+        print("Invalid input.")
+        return
+
+    log = session.query(Log).filter_by(id=int(choice), user_id=current_user.id).first()
+    if not log:
+        print("Log not found.")
+        return
+
+    new_notes = input("Enter new notes: ").strip()
+    if not new_notes:
+        print("⚠️ Notes cannot be empty.")
+        return
+
+    log.notes = new_notes
+    session.commit()
+    print("✅ Log updated successfully!")
+
+def delete_log():
+    print_header("Delete Log")
+
+    logs = session.query(Log).filter_by(user_id=current_user.id).all()
+    if not logs:
+        print("No logs to delete.")
+        return
+
+    for log in logs:
+        print(f"{log.id}. {log.challenge.title} → {log.notes}")
+
+    choice = input("Enter Log ID to delete: ").strip()
+    if not choice.isdigit():
+        print("Invalid input.")
+        return
+
+    log = session.query(Log).filter_by(id=int(choice), user_id=current_user.id).first()
+    if not log:
+        print("Log not found.")
+        return
+
+    session.delete(log)
+    session.commit()
+    print("✅ Log deleted successfully!")
+
 
 def exit_program():
     print("👋 Goodbye!")
@@ -128,10 +195,13 @@ menu_options = {
     "2": view_challenges,
     "3": add_log_cli,
     "4": view_logs,
-    "5": add_challenge,
-    "6": delete_challenge,
+    "5": edit_log,
+    "6": delete_log,
+    "7": add_challenge,
+    "8": delete_challenge,
     "0": exit_program
 }
+
 
 def main_menu():
     login()
@@ -143,10 +213,13 @@ def main_menu():
 2. View Challenges
 3. Add Log
 4. View My Logs
-5. Add Challenge
-6. Delete Challenge
+5. Edit Log
+6. Delete Log
+7. Add Challenge
+8. Delete Challenge
 0. Exit
 """)
+
         choice = input("Choose an option: ").strip()
         action = menu_options.get(choice)
         if action:
